@@ -17,31 +17,37 @@ export default function Authentication() {
   const router = useRouter();
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
 
-  const registerFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const registerFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     const registerData: registerUserType = { username, email, password };
     try {
-      await registerUser({ registerdata: registerData });
+      let response = await registerUser({ registerdata: registerData });
+      if (!response.success) {
+        showToast(`${response.message}`, "error");
+      }
+
       showToast("Register successful, Please login now!", "success");
       router.push("/");
     } catch (err: any) {
-      showToast(`${err}`, "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const loginFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const loginFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     const loginData: LoginUserType = { username, email, password };
     try {
-      await loginUser({ logindata: loginData });
+      const response = await loginUser({ logindata: loginData });
+      if (!response.success) {
+        showToast(`${response.message}`, "error");
+      }
+
       showToast("Login successful!", "success");
       router.push("/dashboard");
     } catch (err: any) {
-      showToast(`${err}`, "error");
     } finally {
       setLoading(false);
     }
@@ -55,6 +61,10 @@ export default function Authentication() {
         }`}
       >
         <SignUpForm
+          loading={loading}
+          username={username}
+          email={email}
+          password={password}
           isActive={isRightPanelActive}
           onSubmit={registerFormSubmit}
           setUsername={setUsername}
@@ -62,7 +72,11 @@ export default function Authentication() {
           setPassword={setPassword}
         />
         <SignInForm
+          loading={loading}
           isActive={isRightPanelActive}
+          username={username}
+          email={email}
+          password={password}
           onSubmit={loginFormSubmit}
           setUsername={setUsername}
           setEmail={setEmail}

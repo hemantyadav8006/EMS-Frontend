@@ -1,7 +1,12 @@
 import Input from "@/components/ui/Input";
+import { Loader } from "@/components/common/Loader";
 
 interface SignInFormProps {
+  loading: boolean;
   isActive: boolean;
+  username?: string;
+  email?: string;
+  password: string;
   onSubmit: (e: React.FormEvent) => void;
   setUsername: (value: string) => void;
   setEmail: (value: string) => void;
@@ -9,6 +14,10 @@ interface SignInFormProps {
 }
 
 export default function SignInForm({
+  loading,
+  username,
+  email,
+  password,
   isActive,
   onSubmit,
   setUsername,
@@ -31,6 +40,7 @@ export default function SignInForm({
           label="Username"
           placeholder="hemantyadav"
           type="text"
+          value={username}
           required={false}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -39,6 +49,7 @@ export default function SignInForm({
           label="Email"
           placeholder="hemant@google.com"
           type="email"
+          value={email}
           required={false}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -47,6 +58,7 @@ export default function SignInForm({
           label="Password"
           placeholder="*******"
           type="password"
+          value={password}
           required={true}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -54,7 +66,7 @@ export default function SignInForm({
           Forgot your password?
         </a>
         <button className="mt-4 bg-[#FF4B2B] text-white font-bold py-3 px-10 rounded-full text-sm uppercase shadow-2xl hover:bg-white hover:text-red-400 hover:border-red-400 border cursor-pointer">
-          Sign In
+          {loading ? <Loader width={5} height={5} /> : "Sign In"}
         </button>
       </form>
     </div>
